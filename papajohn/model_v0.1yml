@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Experiment Metadata API
+  description: API for managing metadata related to experiments.
+  version: 1.0.0
+components:
+  schemas:
+    Experiment:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the experiment
+        description:
+          type: string
+          description: Detailed description of the experiment
+        experimentType:
+          type: string
+          description: Type of the experiment (e.g., network, infrastructure, etc.)
+          enum:
+            - network
+            - infrastructure
+            - backgammon
+        expectedToStart:
+          type: integer
+          format: int64
+          description: Expected start time (Unix timestamp)
+        expectedToEnd:
+          type: integer
+          format: int64
+          description: Expected end time (Unix timestamp)
+        relatedVertical:
+          $ref: '#/components/schemas/Vertical'
+        tags:
+          type: array
+          description: Tags associated with the experiment
+          items:
+            $ref: '#/components/schemas/Tag'
+        testbed:
+          $ref: '#/components/schemas/Testbed'
+        project:
+          $ref: '#/components/schemas/Project'
+        sessions:
+          type: array
+          description: List of sessions associated with the experiment
+          items:
+            $ref: '#/components/schemas/Session'
+        steps:
+          type: array
+          description: Generic instructions or steps for the experiment
+          items:
+            type: string
+            description: A single step or instruction
+        experimenter:
+          type: object
+          description: Information about the experimenter
+          properties:
+            name:
+              type: string
+              description: Name of the experimenter
+            email:
+              type: string
+              format: email
+              description: Email address of the contact person
+            specificInfo:
+              type: array
+              description: Additional specific information about the experimenter as key-value pairs
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: Key for the specific information
+                  value:
+                    type: string
+                    description: Value for the specific information
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the tag
+        name:
+          type: string
+          description: Name of the tag
+        description:
+          type: string
+          description: Description of the tag
+    Testbed:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the testbed
+        name:
+          type: string
+          description: Name of the testbed
+        location:
+          type: string
+          description: Location of the testbed
+        affiliation:
+          type: string
+          description: Affiliation associated with the testbed
+        contactInfo:
+          type: object
+          description: Contact information for the testbed
+          properties:
+            name:
+              type: string
+              description: Name of the contact person
+            position:
+              type: string
+              description: Position of the contact person in this testbed
+            email:
+              type: string
+              format: email
+              description: Email address of the contact person
+            phone:
+              type: string
+              description: Phone number of the contact person
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the project
+        name:
+          type: string
+          description: Name of the project
+        startDate:
+          type: string
+          format: date
+          description: Start date of the project
+        duration:
+          type: integer
+          description: Duration of the project in days
+    Vertical:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the vertical
+        verticalName:
+          type: string
+          description: Name of the vertical
+        description:
+          type: string
+          description: Description of the vertical
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the session
+        name:
+          type: string
+          description: Name of the session
+        description:
+          type: string
+          description: Description of the session
+        startTime:
+          type: integer
+          format: int64
+          description: Start time of the session (Unix timestamp)
+        endTime:
+          type: integer
+          format: int64
+          description: End time of the session (Unix timestamp)
+        configurationParameters:
+          type: array
+          description: List of configuration parameters for the session
+          items:
+            $ref: '#/components/schemas/ConfigurationParameter'
+        metrics:
+          type: array
+          description: List of metrics for the session
+          items:
+            $ref: '#/components/schemas/Metric'
+    ConfigurationParameter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the configuration parameter
+        name:
+          type: string
+          description: Name of the configuration parameter
+        description:
+          type: string
+          description: Description of the configuration parameter
+        value:
+          type: string
+          description: Value of the configuration parameter
+    Metric:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the metric
+        name:
+          type: string
+          description: Name of the metric
+        description:
+          type: string
+          description: Description of the metric
+        value:
+          type: string
+          description: Value of the metric
+        unit:
+          type: string
+          description: Unit of measurement for the metric
