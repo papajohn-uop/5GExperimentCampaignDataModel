@@ -1,0 +1,250 @@
+@startuml
+title Combined Experiment and Experiment Campaign Data Model
+
+' Include all content from model_v0.1.puml
+class Experiment {
+  + title: string
+  + description: string
+  + experimentType: string
+  + expectedToStart: int64
+  + expectedToEnd: int64
+  + relatedVertical: Vertical
+  + tags: Tag[]
+  + testbed: Testbed
+  + project: Project
+  + sessions: Session[]
+  + steps: string[]
+  + experimenter: Experimenter
+}
+
+class Experimenter {
+  + name: string
+  + email: string
+  + specificInfo: KeyValue[]
+}
+
+class KeyValue {
+  + key: string
+  + value: string
+}
+
+class Tag {
+  + id: string
+  + name: string
+  + description: string
+}
+
+class Testbed {
+  + id: string
+  + name: string
+  + location: string
+  + affiliation: string
+  + contactInfo: ContactInfo
+}
+
+class ContactInfo {
+  + name: string
+  + position: string
+  + email: string
+  + phone: string
+}
+
+class Project {
+  + id: string
+  + name: string
+  + startDate: date
+  + duration: int
+}
+
+class Vertical {
+  + id: string
+  + verticalName: string
+  + description: string
+}
+
+class Session {
+  + id: string
+  + name: string
+  + description: string
+  + startTime: int64
+  + endTime: int64
+  + configurationParameters: ConfigurationParameter[]
+  + metrics: Metric[]
+}
+
+class ConfigurationParameter {
+  + id: string
+  + name: string
+  + description: string
+  + value: string
+}
+
+class Metric {
+  + id: string
+  + name: string
+  + description: string
+  + value: string
+  + unit: string
+}
+
+Experiment --> Vertical : relatedVertical
+Experiment --> Tag : tags
+Experiment --> Testbed : testbed
+Experiment --> Project : project
+Experiment --> Session : sessions
+Experiment --> Experimenter : experimenter
+Experimenter --> KeyValue : specificInfo
+Testbed --> ContactInfo : contactInfo
+Session --> ConfigurationParameter : configurationParameters
+Session --> Metric : metrics
+
+' Include all content from experiment_campaign_model.puml
+class ExperimentCampaign {
+  + id: string
+  + name: string
+  + version: string
+  + description: string
+  + short_description: string
+  + keywords: List<string>
+  + related_project: string
+  + owner_name: string
+  + owner_email: string
+  + contributors: List<string>
+  + start_time: datetime
+  + end_time: datetime
+  + date_archived: datetime
+  + tags: List<string>
+  + metadata: Map
+  + parent_campaign_id: string
+  + revision_notes: string
+  + linked_publications: List<string>
+  + objective: string
+  + hypothesis: string
+  + experiment_type: string
+  + expected_outcome: string
+  + deployment_method: string
+  + config_repository: string
+  + workflow_engine: string
+  + license: string
+  + data_access_policy: string
+  + external_dataset_links: List<string>
+  + affiliations: List<string>
+  + contact_person: string
+  + collaborators: List<string>
+  + ontology_tags: List<string>
+  + semantic_annotations: Map
+  + artifacts: List<RelatedFile>
+}
+
+class Environment {
+  + id: string
+  + name: string
+  + description: string
+  + ue_types: List<string>
+  + ue_count: int
+  + ue_distribution: string
+  + mobility_model: string
+  + location_type: string
+  + distance_from_cell: string
+  + interference_conditions: string
+  + coverage_type: string
+  + network_architecture: string
+  + dual_connectivity: boolean
+  + carrier_aggregation: boolean
+  + mec_enabled: boolean
+  + is_virtualized: boolean
+  + edge_location: string
+  + time_synchronized: boolean
+  + orchestration_platform: string
+  + external_emulators: List<string>
+  + external_traffic_sources: List<string>
+  + monitoring_stack: string
+  + metadata: Map
+  + artifacts: List<RelatedFile>
+}
+
+class TestingSession {
+  + id: string
+  + name: string
+  + description: string
+  + start_time: datetime
+  + end_time: datetime
+  + executed_by: string
+  + trigger_method: string
+  + measurement_family: string
+  + ue_profile: string
+  + traffic_pattern: string
+  + qos_profile: string
+  + slice_id: string
+  + environment_snapshot: string
+  + network_config_snapshot: string
+  + ran_snapshot: string
+  + time_sync_status: string
+  + outcome: string
+  + observed_issues: List<string>
+  + summary_metrics: Map
+  + metadata: Map
+  + artifacts: List<RelatedFile>
+}
+
+class TestProcedure {
+  + id: string
+  + name: string
+  + overview: string
+  + steps: List<string>
+  + toolchain: List<string>
+  + execution_mode: string
+  + script_refs: List<string>
+  + trigger_conditions: List<string>
+  + success_criteria: List<string>
+  + rollback_plan: string
+  + expected_duration_min: int
+  + depends_on: List<string>
+  + metadata: Map
+  + artifacts: List<RelatedFile>
+}
+
+class RelatedFile {
+  + id: string
+  + name: string
+  + file_path: string
+  + file_type: string
+  + uploaded_at: datetime
+  + metadata: Map
+}
+
+class ObservationPoint {
+  + id: string
+  + name: string
+  + type: string
+  + location: string
+  + target_component: string
+  + interface_name: string
+  + collection_tool: string
+  + description: string
+  + metadata: Map
+  + artifacts: List<RelatedFile>
+}
+
+class MeasurementTool {
+  + id: string
+  + name: string
+  + type: string
+  + version: string
+  + description: string
+  + target_layer: string
+  + collection_mode: string
+  + output_format: string
+  + metadata: Map
+}
+
+
+ExperimentCampaign --> Experiment : "contains"
+ExperimentCampaign --> Environment : "1"
+ExperimentCampaign --> TestingSession : "*"
+Environment --> Testbed : "testbed_refs"
+TestingSession --> TestProcedure : "1"
+TestingSession --> ObservationPoint : "*"
+TestingSession --> MeasurementTool : "*"
+
+@enduml
