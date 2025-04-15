@@ -15,7 +15,6 @@
 @startuml
 title Experiment Campaign Data Model
 
-hide members
 
 class ExperimentCampaign {
   +id: string                             ' e.g., "exp-camp-2025-01"
@@ -295,7 +294,7 @@ class GSMA_GSTCharacteristics {
   +preemption_vulnerability: string       ' e.g., "not preemptible"
 
   '=== Scheduling & Timing Constraints ===
-  +availability_time_window: string       ' e.g., "24/7", "09:00–18:00"
+  +availability_time_window: string       ' e.g., "24/7", "09:00Â–18:00"
 
   '=== Other / Metadata ===
   +metadata: Map                          ' Free-form data
