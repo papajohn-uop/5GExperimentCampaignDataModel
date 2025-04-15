@@ -1,0 +1,99 @@
+@startuml
+title Experiment Metadata API
+
+class Experiment {
+  + title: string
+  + description: string
+  + experimentType: string
+  + expectedToStart: int64
+  + expectedToEnd: int64
+  + relatedVertical: Vertical
+  + tags: Tag[]
+  + testbed: Testbed
+  + project: Project
+  + sessions: Session[]
+  + steps: string[]
+  + experimenter: Experimenter
+}
+
+class Experimenter {
+  + name: string
+  + email: string
+  + specificInfo: KeyValue[]
+}
+
+class KeyValue {
+  + key: string
+  + value: string
+}
+
+class Tag {
+  + id: string
+  + name: string
+  + description: string
+}
+
+class Testbed {
+  + id: string
+  + name: string
+  + location: string
+  + affiliation: string
+  + contactInfo: ContactInfo
+}
+
+class ContactInfo {
+  + name: string
+  + position: string
+  + email: string
+  + phone: string
+}
+
+class Project {
+  + id: string
+  + name: string
+  + startDate: date
+  + duration: int
+}
+
+class Vertical {
+  + id: string
+  + verticalName: string
+  + description: string
+}
+
+class Session {
+  + id: string
+  + name: string
+  + description: string
+  + startTime: int64
+  + endTime: int64
+  + configurationParameters: ConfigurationParameter[]
+  + metrics: Metric[]
+}
+
+class ConfigurationParameter {
+  + id: string
+  + name: string
+  + description: string
+  + value: string
+}
+
+class Metric {
+  + id: string
+  + name: string
+  + description: string
+  + value: string
+  + unit: string
+}
+
+Experiment --> Vertical : relatedVertical
+Experiment --> Tag : tags
+Experiment --> Testbed : testbed
+Experiment --> Project : project
+Experiment --> Session : sessions
+Experiment --> Experimenter : experimenter
+Experimenter --> KeyValue : specificInfo
+Testbed --> ContactInfo : contactInfo
+Session --> ConfigurationParameter : configurationParameters
+Session --> Metric : metrics
+@enduml
